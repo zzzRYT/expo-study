@@ -1,9 +1,9 @@
 import { Text, View } from 'react-native';
 
-export default function IndexScreen() {
+export default function SearchScreen() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Edit app/index.tsx to edit this screen</Text>
+      <Text>Edit app/search.tsx to edit this screen</Text>
     </View>
   );
 }
