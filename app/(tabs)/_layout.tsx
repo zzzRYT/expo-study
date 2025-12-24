@@ -11,9 +11,9 @@ export default function TabsLayout() {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
-          title: 'index',
+          title: 'home',
           tabBarLabel: () => null,
           tabBarIcon: ({ focused }) => (
             <Ionicons
@@ -82,6 +82,10 @@ export default function TabsLayout() {
             />
           ),
         }}
+      />
+      <Tabs.Screen
+        name="(post)/[username]/post/[postId]"
+        options={{ href: null }}
       />
     </Tabs>
   );
