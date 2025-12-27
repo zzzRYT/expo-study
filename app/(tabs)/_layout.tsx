@@ -1,7 +1,9 @@
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs';
 import { Tabs, useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
+  Animated,
   Modal,
   Pressable,
   StyleSheet,
@@ -10,7 +12,50 @@ import {
   View,
 } from 'react-native';
 
-const isLoggedIn = false;
+const isLoggedIn = true;
+
+const AnimatedTabBarButton = ({
+  children,
+  onPress,
+  style,
+  ...restProps
+}: BottomTabBarButtonProps) => {
+  const scaleValue = useRef(new Animated.Value(1)).current;
+  const { ref, ...propsWithoutRef } = restProps;
+
+  const handlePressOut = () => {
+    Animated.sequence([
+      Animated.spring(scaleValue, {
+        toValue: 1.2,
+        useNativeDriver: true,
+        speed: 200,
+      }),
+      Animated.spring(scaleValue, {
+        toValue: 1,
+        useNativeDriver: true,
+        speed: 200,
+      }),
+    ]).start();
+  };
+
+  return (
+    <Pressable
+      {...propsWithoutRef}
+      onPress={onPress}
+      onPressOut={handlePressOut}
+      style={[
+        { flex: 1, justifyContent: 'center', alignItems: 'center' },
+        style,
+      ]}
+      // Disable Android ripple effect
+      android_ripple={{ borderless: false, radius: 0 }}
+    >
+      <Animated.View style={{ transform: [{ scale: scaleValue }] }}>
+        {children}
+      </Animated.View>
+    </Pressable>
+  );
+};
 
 export default function TabsLayout() {
   const router = useRouter();
@@ -30,6 +75,7 @@ export default function TabsLayout() {
         backBehavior="history"
         screenOptions={{
           headerShown: false,
+          tabBarButton: (props) => <AnimatedTabBarButton {...props} />,
         }}
       >
         <Tabs.Screen
